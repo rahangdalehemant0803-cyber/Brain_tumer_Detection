@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Scan Result — NeuroScan AI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="eyebrow">Result &middot; #{{ '%06d' % scan.id }}</div>
+  <h1>Analysis complete</h1>
+  <p>Scanned on {{ scan.created_at.strftime("%d %b %Y at %I:%M %p") }}{% if scan.patient_name %} &middot; Patient: {{ scan.patient_name }}{% endif %}</p>
+</div>
+
+<div class="result-hero">
+  <div class="result-image">
+    <img src="{{ url_for('static', filename='uploads/' + scan.image_filename) }}" alt="MRI scan" style="max-height: 320px; object-fit: contain;" />
+  </div>
+
+  <div class="result-verdict {% if scan.predicted_class == 'No Tumor' %}is-success{% else %}is-danger{% endif %}">
+    <div class="verdict-label">AI Prediction</div>
+    <h2>{{ scan.predicted_class }}</h2>
+    <div class="confidence">Confidence: {{ scan.confidence }}%</div>
+
+    <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.6; max-width: 420px;">
+      {{ class_info[scan.predicted_class] if class_info is defined else '' }}
+    </p>
+
+    <div class="action-row">
+      <a href="{{ url_for('download_report', scan_id=scan.id) }}" class="btn btn-primary">Download PDF Report</a>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-outline">New Scan</a>
+    </div>
+
+    <div class="disclaimer-box">
+      This is an AI-assisted screening result, not a medical diagnosis. Please consult
+      a qualified radiologist or neurologist before making any clinical decisions.
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="font-size: 16px; margin-bottom: 18px;">Class probability breakdown</h3>
+  {% for label, value in probabilities.items() %}
+  <div class="prob-row">
+    <div class="prob-label">
+      <span>{{ label }}</span>
+      <span>{{ value }}%</span>
+    </div>
+    <div class="prob-track">
+      <div class="prob-fill" data-value="{{ value }}" style="width: 0%;"></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

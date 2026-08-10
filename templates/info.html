@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Tumor Info — NeuroScan AI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="eyebrow">Learn</div>
+  <h1>Understanding brain tumor types</h1>
+  <p>A quick reference for the four classes this model is trained to recognize.</p>
+</div>
+
+<div class="info-grid">
+  <div class="info-card">
+    <span class="tag">Class 01</span>
+    <h3>Glioma</h3>
+    <p>{{ class_info["Glioma"] }} Common symptoms can include headaches, seizures, and
+       gradual changes in vision, memory, or coordination — though symptoms vary
+       greatly depending on size and location.</p>
+  </div>
+
+  <div class="info-card">
+    <span class="tag">Class 02</span>
+    <h3>Meningioma</h3>
+    <p>{{ class_info["Meningioma"] }} Because they grow slowly, many are found
+       incidentally and monitored rather than treated immediately.</p>
+  </div>
+
+  <div class="info-card">
+    <span class="tag">Class 03</span>
+    <h3>Pituitary Tumor</h3>
+    <p>{{ class_info["Pituitary"] }} Symptoms often relate to hormonal imbalance —
+       fatigue, vision changes, or irregular growth patterns.</p>
+  </div>
+
+  <div class="info-card">
+    <span class="tag">Class 04</span>
+    <h3>No Tumor</h3>
+    <p>{{ class_info["No Tumor"] }} A clear result is reassuring, but any ongoing
+       symptoms should still be discussed with a doctor.</p>
+  </div>
+</div>
+
+<div class="disclaimer-box" style="margin-top: 24px;">
+  <strong>Important:</strong> The information above is educational and general in
+  nature. NeuroScan AI is a screening-assistance tool, not a diagnostic device.
+  Always consult a qualified radiologist or neurologist for an official diagnosis.
+</div>
+{% endblock %}

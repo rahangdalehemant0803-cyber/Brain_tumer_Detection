@@ -1,0 +1,217 @@
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  position: relative;
+  z-index: 1;
+}
+
+/* -------- Left branding panel with subtle brain watermark -------- */
+
+.auth-brand {
+  position: relative;
+  background:
+    radial-gradient(60% 50% at 20% 8%, rgba(45, 212, 191, 0.14), transparent 65%),
+    radial-gradient(50% 40% at 90% 90%, rgba(140, 124, 255, 0.12), transparent 65%),
+    linear-gradient(180deg, #070B12 0%, #04060A 100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 46px 50px;
+  color: #EAF3F3;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* brain watermark image — deliberately low opacity so it reads as texture,
+   not a literal photo */
+.auth-brand .brain-watermark {
+  position: absolute;
+  right: -8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 640px;
+  max-width: 72vw;
+  opacity: 0.075;
+  filter: brightness(1.5);
+  pointer-events: none;
+}
+
+/* faint neural dot-grid texture layered behind everything */
+.auth-brand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(45, 212, 191, 0.16) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* moving scan-line accent, echoes the dashboard's scan motif */
+.auth-brand::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(45,212,191,0.9), transparent);
+  box-shadow: 0 0 18px 3px rgba(45,212,191,0.55);
+  animation: auth-sweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes auth-sweep {
+  0%, 100% { top: 8%; opacity: 0; }
+  10% { opacity: 1; }
+  50% { top: 90%; opacity: 1; }
+  60% { opacity: 0; }
+}
+
+.auth-brand-top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-brand-top .logo-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #2DD4BF;
+  box-shadow: 0 0 0 5px rgba(45,212,191,0.18), 0 0 14px 2px rgba(45,212,191,0.5);
+}
+
+.auth-brand-top span {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  background: linear-gradient(120deg, #fff, #9FEFE4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.auth-brand-mid {
+  position: relative;
+  z-index: 2;
+  max-width: 440px;
+}
+
+.auth-brand-mid .eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #2DD4BF;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.auth-brand-mid .eyebrow::before {
+  content: "";
+  width: 18px; height: 1px;
+  background: #2DD4BF;
+}
+
+.auth-brand-mid h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 38px;
+  line-height: 1.18;
+  font-weight: 600;
+  margin-bottom: 18px;
+  background: linear-gradient(120deg, #ffffff 35%, #8FEAE0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.auth-brand-mid p {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: rgba(234, 243, 243, 0.62);
+}
+
+.auth-brand-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.auth-brand-bottom .metric .num {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 23px;
+  font-weight: 600;
+  color: #fff;
+}
+.auth-brand-bottom .metric .label {
+  font-size: 11.5px;
+  color: rgba(234, 243, 243, 0.5);
+  margin-top: 3px;
+}
+
+/* -------- Right form panel -------- */
+
+.auth-form-panel {
+  position: relative;
+  background:
+    radial-gradient(70% 60% at 100% 0%, rgba(140, 124, 255, 0.08), transparent 65%),
+    #060A10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.auth-form-card {
+  width: 100%;
+  max-width: 390px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 24px;
+  padding: 38px 34px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: fade-up 0.5s ease both;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-form-card h2 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 7px;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.auth-form-card .sub {
+  font-size: 13.5px;
+  color: #8FA1AA;
+  margin-bottom: 30px;
+}
+
+.auth-switch {
+  margin-top: 24px;
+  font-size: 13.5px;
+  color: #8FA1AA;
+  text-align: center;
+}
+
+.auth-switch a { color: #2DD4BF; font-weight: 600; }
+.auth-switch a:hover { text-decoration: underline; }
+
+@media (max-width: 860px) {
+  .auth-shell { grid-template-columns: 1fr; }
+  .auth-brand { display: none; }
+}

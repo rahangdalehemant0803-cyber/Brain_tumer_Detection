@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log in — NeuroScan AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+  <div class="auth-shell">
+
+    <section class="auth-brand">
+      <img class="brain-watermark" src="{{ url_for('static', filename='images/brain-watermark.svg') }}" alt="" />
+
+      <div class="auth-brand-top">
+        <span class="logo-dot"></span>
+        <span>NeuroScan AI</span>
+      </div>
+
+      <div class="auth-brand-mid">
+        <div class="eyebrow">MRI &middot; Deep Learning &middot; Local Inference</div>
+        <h1>See what the scan is really telling you.</h1>
+        <p>Upload a brain MRI and get an instant, model-driven read on glioma, meningioma,
+           pituitary, or a clear scan — with a downloadable report for every result.</p>
+      </div>
+
+      <div class="auth-brand-bottom">
+        <div class="metric">
+          <div class="num">4</div>
+          <div class="label">tumor classes</div>
+        </div>
+        <div class="metric">
+          <div class="num">100%</div>
+          <div class="label">on-device model</div>
+        </div>
+        <div class="metric">
+          <div class="num">&lt;5s</div>
+          <div class="label">avg. analysis time</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="auth-form-panel">
+      <div class="auth-form-card">
+        <h2>Welcome back</h2>
+        <p class="sub">Log in to access your scan dashboard.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-stack">
+              {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+          <div class="field">
+            <label for="username">Username or email</label>
+            <input type="text" id="username" name="username" placeholder="e.g. dr.sharma" required autofocus />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required />
+          </div>
+          <div class="checkbox-row" style="margin-bottom: 22px;">
+            <input type="checkbox" id="remember" name="remember" />
+            <label for="remember" style="margin: 0; font-weight: 400;">Keep me signed in</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        </form>
+
+        <div class="auth-switch">
+          Don't have an account? <a href="{{ url_for('register') }}">Create one</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

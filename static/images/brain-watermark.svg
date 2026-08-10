@@ -1,0 +1,59 @@
+<svg viewBox="0 0 600 520" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Original stylized brain silhouette (line art) used as a low-opacity
+       decorative watermark on the auth screen. -->
+  <g stroke="#EAF3F3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- outer brain silhouette -->
+    <path d="M210 70
+             C150 70 100 115 95 175
+             C60 190 40 235 55 280
+             C35 305 35 345 60 370
+             C55 410 85 450 130 460
+             C150 490 190 505 230 495
+             C260 515 310 515 340 495
+             C385 505 430 480 445 440
+             C480 430 500 395 490 360
+             C515 335 520 295 495 265
+             C505 225 485 185 445 165
+             C440 120 400 80 350 72
+             C320 55 270 55 240 68
+             C228 66 218 66 210 70 Z" />
+
+    <!-- central longitudinal fissure -->
+    <path d="M270 75 C260 150 260 250 270 340 C275 400 275 450 270 495" />
+
+    <!-- gyri / sulci folds - left hemisphere -->
+    <path d="M120 160 C150 150 180 165 190 195" />
+    <path d="M95 220 C130 215 165 230 175 260" />
+    <path d="M85 290 C120 280 160 295 170 325" />
+    <path d="M100 360 C135 355 170 370 180 395" />
+    <path d="M150 430 C180 420 210 430 220 455" />
+    <path d="M160 130 C190 120 220 135 225 160" />
+
+    <!-- gyri / sulci folds - right hemisphere -->
+    <path d="M420 165 C390 155 360 170 350 200" />
+    <path d="M450 225 C415 220 380 235 370 265" />
+    <path d="M465 295 C430 285 390 300 380 330" />
+    <path d="M440 365 C405 360 370 375 360 400" />
+    <path d="M370 435 C340 425 310 435 300 460" />
+    <path d="M395 135 C365 125 335 140 330 165" />
+
+    <!-- cerebellum hint -->
+    <path d="M230 470 C250 485 290 485 310 470" />
+  </g>
+
+  <!-- neural node accents (suggests AI analysis) -->
+  <g fill="#2DD4BF">
+    <circle cx="190" cy="195" r="3.5" />
+    <circle cx="175" cy="260" r="3.5" />
+    <circle cx="350" cy="200" r="3.5" />
+    <circle cx="380" cy="330" r="3.5" />
+    <circle cx="220" cy="455" r="3.5" />
+    <circle cx="300" cy="460" r="3.5" />
+  </g>
+  <g stroke="#2DD4BF" stroke-width="1.2" opacity="0.6">
+    <path d="M190 195 L175 260" />
+    <path d="M350 200 L380 330" />
+    <path d="M220 455 L300 460" />
+  </g>
+</svg>

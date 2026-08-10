@@ -1,0 +1,134 @@
+"""
+Generates a clean PDF diagnostic report for a scan using reportlab.
+No external API or service is used — the PDF is built entirely locally.
+"""
+
+import io
+import json
+from datetime import datetime
+
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.units import mm
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as RLImage, HRFlowable
+)
+
+TEAL = colors.HexColor("#0F6E6E")
+DARK = colors.HexColor("#10222B")
+MUTED = colors.HexColor("#5B6B73")
+DANGER = colors.HexColor("#D64545")
+SUCCESS = colors.HexColor("#1E8E5A")
+
+
+def build_report_pdf(scan, user, image_path):
+    """Builds and returns an in-memory PDF (BytesIO) for the given scan."""
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer, pagesize=A4,
+        topMargin=20 * mm, bottomMargin=20 * mm,
+        leftMargin=20 * mm, rightMargin=20 * mm,
+    )
+
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        "TitleStyle", parent=styles["Title"], textColor=TEAL, fontSize=20, spaceAfter=2
+    )
+    sub_style = ParagraphStyle(
+        "SubStyle", parent=styles["Normal"], textColor=MUTED, fontSize=10
+    )
+    heading_style = ParagraphStyle(
+        "HeadingStyle", parent=styles["Heading2"], textColor=DARK, fontSize=13, spaceBefore=14, spaceAfter=6
+    )
+    normal_style = ParagraphStyle(
+        "NormalStyle", parent=styles["Normal"], textColor=DARK, fontSize=10.5, leading=15
+    )
+
+    story = []
+
+    # --- Header ---
+    story.append(Paragraph("NeuroScan AI &mdash; Diagnostic Report", title_style))
+    story.append(Paragraph("AI-assisted brain MRI tumor screening", sub_style))
+    story.append(Spacer(1, 6))
+    story.append(HRFlowable(width="100%", color=TEAL, thickness=1.2))
+    story.append(Spacer(1, 14))
+
+    # --- Patient / Scan info table ---
+    result_color = SUCCESS if scan.predicted_class == "No Tumor" else DANGER
+    info_data = [
+        ["Report ID", f"#{scan.id:06d}"],
+        ["Generated on", datetime.utcnow().strftime("%d %b %Y, %I:%M %p UTC")],
+        ["Patient name", scan.patient_name or "Not provided"],
+        ["Reviewed by (account)", user.full_name],
+        ["Scan file", scan.image_filename],
+    ]
+    info_table = Table(info_data, colWidths=[55 * mm, 100 * mm])
+    info_table.setStyle(TableStyle([
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("TEXTCOLOR", (0, 0), (0, -1), MUTED),
+        ("TEXTCOLOR", (1, 0), (1, -1), DARK),
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+        ("LINEBELOW", (0, 0), (-1, -2), 0.5, colors.HexColor("#E3E8EC")),
+    ]))
+    story.append(info_table)
+    story.append(Spacer(1, 16))
+
+    # --- MRI Image ---
+    story.append(Paragraph("Uploaded MRI Scan", heading_style))
+    try:
+        img = RLImage(image_path, width=70 * mm, height=70 * mm, kind="proportional")
+        story.append(img)
+    except Exception:
+        story.append(Paragraph("(scan image unavailable)", normal_style))
+    story.append(Spacer(1, 10))
+
+    # --- Prediction result ---
+    story.append(Paragraph("AI Prediction Result", heading_style))
+    result_style = ParagraphStyle(
+        "ResultStyle", parent=styles["Normal"], textColor=result_color,
+        fontSize=16, fontName="Helvetica-Bold", spaceAfter=4
+    )
+    story.append(Paragraph(f"{scan.predicted_class}", result_style))
+    story.append(Paragraph(f"Model confidence: {scan.confidence}%", normal_style))
+    story.append(Spacer(1, 10))
+
+    # --- Probability breakdown table ---
+    story.append(Paragraph("Class Probability Breakdown", heading_style))
+    probs = json.loads(scan.probabilities_json)
+    prob_data = [["Class", "Probability"]] + [
+        [label, f"{value}%"] for label, value in probs.items()
+    ]
+    prob_table = Table(prob_data, colWidths=[90 * mm, 65 * mm])
+    prob_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), TEAL),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 10),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+        ("TOPPADDING", (0, 0), (-1, -1), 7),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E3E8EC")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F7F9FC")]),
+    ]))
+    story.append(prob_table)
+    story.append(Spacer(1, 18))
+
+    # --- Disclaimer ---
+    story.append(HRFlowable(width="100%", color=colors.HexColor("#E3E8EC"), thickness=1))
+    story.append(Spacer(1, 8))
+    disclaimer_style = ParagraphStyle(
+        "Disclaimer", parent=styles["Normal"], textColor=MUTED, fontSize=8.5, leading=12
+    )
+    story.append(Paragraph(
+        "<b>Disclaimer:</b> This report is generated by an automated machine-learning "
+        "model for educational/screening-assistance purposes only. It is NOT a medical "
+        "diagnosis. Please consult a qualified radiologist or neurologist for clinical "
+        "interpretation and treatment decisions.",
+        disclaimer_style
+    ))
+
+    doc.build(story)
+    buffer.seek(0)
+    return buffer

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Scan History — NeuroScan AI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="eyebrow">History</div>
+  <h1>All scans</h1>
+  <p>Every MRI you've analyzed, with results and downloadable reports.</p>
+</div>
+
+<div class="card">
+  {% if scans %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Scan</th>
+        <th>Patient</th>
+        <th>Result</th>
+        <th>Confidence</th>
+        <th>Date</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for scan in scans %}
+      <tr>
+        <td>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="{{ url_for('static', filename='uploads/' + scan.image_filename) }}"
+                 alt="thumbnail" style="width:42px; height:42px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" />
+            <span class="mono" style="font-size:12.5px; color: var(--text-faint);">#{{ '%06d' % scan.id }}</span>
+          </div>
+        </td>
+        <td>{{ scan.patient_name or "—" }}</td>
+        <td>
+          {% if scan.predicted_class == "No Tumor" %}
+            <span class="badge badge-success">{{ scan.predicted_class }}</span>
+          {% else %}
+            <span class="badge badge-danger">{{ scan.predicted_class }}</span>
+          {% endif %}
+        </td>
+        <td class="mono">{{ scan.confidence }}%</td>
+        <td>{{ scan.created_at.strftime("%d %b %Y, %I:%M %p") }}</td>
+        <td>
+          <div style="display:flex; gap:8px;">
+            <a href="{{ url_for('result', scan_id=scan.id) }}" class="btn btn-outline" style="padding: 7px 14px; font-size: 12.5px;">View</a>
+            <a href="{{ url_for('download_report', scan_id=scan.id) }}" class="btn btn-outline" style="padding: 7px 14px; font-size: 12.5px;">Report</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="color: var(--text-muted); font-size: 14px;">No scans yet. Head to the dashboard to analyze your first MRI.</p>
+  {% endif %}
+</div>
+{% endblock %}

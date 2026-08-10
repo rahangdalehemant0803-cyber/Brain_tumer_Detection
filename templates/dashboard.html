@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — NeuroScan AI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="eyebrow">Dashboard</div>
+  <h1>Hey {{ current_user.full_name.split(' ')[0] }}, upload a scan to begin</h1>
+  <p>Drop in an MRI image and the model will classify it locally — no external API involved.</p>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total scans analyzed</div>
+    <div class="stat-value">{{ total_scans }}</div>
+  </div>
+  <div class="stat-card danger">
+    <div class="stat-label">Tumor cases flagged</div>
+    <div class="stat-value">{{ tumor_found }}</div>
+  </div>
+  <div class="stat-card accent">
+    <div class="stat-label">Model classes</div>
+    <div class="stat-value">4</div>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom: 28px;">
+  <h3 style="font-size: 17px; margin-bottom: 4px;">Analyze a new MRI scan</h3>
+  <p style="color: var(--text-muted); font-size: 13.5px; margin: 4px 0 20px;">
+    Supported formats: PNG, JPG, JPEG — max 8 MB.
+  </p>
+
+  <form id="upload-form" method="POST" enctype="multipart/form-data" action="{{ url_for('dashboard') }}">
+    <div class="field">
+      <label for="patient_name">Patient name (optional)</label>
+      <input type="text" id="patient_name" name="patient_name" placeholder="e.g. Rohan Verma" />
+    </div>
+
+    <div class="field">
+      <label>MRI image</label>
+      <div class="dropzone" id="dropzone">
+        <div class="dz-empty-state">
+          <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M12 16V4M12 4l-4 4M12 4l4 4" />
+            <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+          </svg>
+          <h3>Click to upload or drag & drop</h3>
+          <p>A clear axial MRI slice works best</p>
+        </div>
+
+        <div class="dropzone-preview" id="dropzone-preview">
+          <div class="scan-sweep"></div>
+          <img id="preview-img" src="" alt="MRI preview" />
+        </div>
+      </div>
+      <input type="file" id="mri_image" name="mri_image" accept=".png,.jpg,.jpeg" hidden required />
+    </div>
+
+    <button type="submit" class="btn btn-primary" id="analyze-btn">Analyze Scan</button>
+  </form>
+</div>
+
+<div class="card">
+  <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 16px;">
+    <h3 style="font-size: 17px;">Recent scans</h3>
+    <a href="{{ url_for('history') }}" class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;">View all</a>
+  </div>
+
+  {% if recent_scans %}
+  <table class="data-table">
+    <thead>
+      <tr><th>Patient</th><th>Result</th><th>Confidence</th><th>Date</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for scan in recent_scans %}
+      <tr>
+        <td>{{ scan.patient_name or "—" }}</td>
+        <td>
+          {% if scan.predicted_class == "No Tumor" %}
+            <span class="badge badge-success">{{ scan.predicted_class }}</span>
+          {% else %}
+            <span class="badge badge-danger">{{ scan.predicted_class }}</span>
+          {% endif %}
+        </td>
+        <td class="mono">{{ scan.confidence }}%</td>
+        <td>{{ scan.created_at.strftime("%d %b %Y, %I:%M %p") }}</td>
+        <td><a href="{{ url_for('result', scan_id=scan.id) }}" class="btn btn-outline" style="padding: 7px 14px; font-size: 12.5px;">View</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p style="color: var(--text-muted); font-size: 14px;">No scans yet — upload your first MRI image above.</p>
+  {% endif %}
+</div>
+{% endblock %}
