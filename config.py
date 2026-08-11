@@ -20,7 +20,7 @@ class Config:
 
     # --- Model settings ---
     # Path to your trained Keras (.h5) model. Drop your model file here.
-    MODEL_PATH = os.path.join(BASE_DIR, "model", "brain_tumor_model.h5")
+    MODEL_PATH = os.path.join(BASE_DIR, "model", "Brain_tumor_model.h5")
 
     # IMPORTANT: This must match the input size your model was TRAINED on.
     # Common sizes are (150, 150) or (224, 224). Change if needed.
