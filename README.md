@@ -112,12 +112,21 @@ The input MRI image is:
 ## ScreenShot
   LOGIN PAGE
   <img width="678" height="723" alt="image" src="https://github.com/user-attachments/assets/0a030b8e-a5dd-4b9b-bccb-c3223f0d68f2" />
+
+
+  
   DASHBOARD PAGE
   <img width="1201" height="814" alt="image" src="https://github.com/user-attachments/assets/bc23b314-a384-4a56-abcf-452fcf3059d5" />
+
+  
   RESULT PAGE
   <img width="1205" height="740" alt="image" src="https://github.com/user-attachments/assets/14228d8d-b92f-4e78-974c-4252140be1d5" />
+
+  
   PDF REPORT PAGE
   <img width="540" height="680" alt="image" src="https://github.com/user-attachments/assets/edb37369-62a3-4b07-ad6f-e0090160491a" />
+
+  
  
  # 👨‍💻 Team Members
 
