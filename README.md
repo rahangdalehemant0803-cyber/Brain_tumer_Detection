@@ -1,111 +1,147 @@
-# NeuroScan AI — Brain Tumor Detection Web App
+# 🧠 NeuroScan AI - Brain Tumor Detection System
 
-Flask + SQLite based web application jo MRI images me brain tumor detect
-karta hai using aapka trained Keras (.h5) model. Koi external API use
-nahi hoti — sab kuch locally chalta hai.
+![NeuroScan AI Banner](https://img.shields.io/badge/AI-Brain%20Tumor%20Detection-blue)
 
-## Features
+## 🚀 About Project
 
-- Login / Register system (Flask-Login + password hashing)
-- SQLite database (Users + Scans history)
-- Drag & drop MRI upload with live preview
-- Local model inference (4-class: Glioma, Meningioma, No Tumor, Pituitary)
-- Result page with confidence + class-wise probability breakdown
-- Downloadable PDF report for every scan (reportlab)
-- Scan history page
-- Tumor information / education page
-- Clean, custom-designed UI (no Bootstrap defaults)
+**NeuroScan AI** is an Artificial Intelligence based Brain Tumor Detection System that uses **Deep Learning, Computer Vision, and Medical Image Processing** to analyze MRI brain images.
 
-## Folder Structure
+The system automatically detects and classifies brain MRI scans into four categories:
 
-```
-brain_tumor_app/
-├── app.py                     # main Flask app + routes
-├── config.py                  # all settings (paths, image size, class labels)
-├── extensions.py              # db, login_manager instances
-├── models.py                  # User & Scan database models
-├── requirements.txt
-├── model/
-│   └── brain_tumor_model.h5   # <-- put your trained model here
-├── utils/
-│   ├── predict.py             # model loading + prediction logic
-│   └── report_generator.py    # PDF report builder
-├── static/
-│   ├── css/
-│   │   ├── style.css          # main design system
-│   │   └── auth.css           # login/register page styles
-│   ├── js/
-│   │   └── main.js            # dropzone + animations
-│   ├── images/
-│   │   └── brain-watermark.svg
-│   └── uploads/                # uploaded MRI images get saved here
-├── templates/
-│   ├── base.html
-│   ├── login.html
-│   ├── register.html
-│   ├── dashboard.html
-│   ├── result.html
-│   ├── history.html
-│   ├── info.html
-│   └── error.html
-└── instance/
-    └── database.db             # auto-created SQLite DB
-```
+- 🧠 Glioma Tumor
+- 🧠 Meningioma Tumor
+- 🧠 Pituitary Tumor
+- ✅ No Tumor
 
-## Setup
 
-### 1. Virtual environment banaye (recommended)
+---
 
-```bash
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# Mac/Linux:
-source venv/bin/activate
-```
+# 🎯 Project Objective
 
-### 2. Dependencies install karein
+The main objective of NeuroScan AI is to provide a fast and intelligent AI-based system that can assist in brain MRI analysis.
 
-```bash
-pip install -r requirements.txt
-```
+The system helps users upload MRI images and get AI-based prediction results along with patient information management.
 
-### 3. Apna model rakhein
 
-Apni trained `.h5` file ko is path par copy karein:
+## ✨ Features
 
-```
-model/brain_tumor_model.h5
-```
+✔ MRI Image Upload  
+✔ AI Based Tumor Prediction  
+✔ Brain Tumor Classification  
+✔ Patient Information Management  
+✔ Modern Dashboard UI  
+✔ Prediction Result Display  
+✔ Deep Learning Model Integration  
+✔ User Friendly Interface  
+✔ Prediction History  
+✔ AI Report Generation  
 
-### 4. `config.py` check karein — YEH SABSE ZAROORI STEP HAI
 
-```python
-IMAGE_SIZE = (150, 150)   # apne model ke training input size se match karein
-CLASS_LABELS = ["Glioma", "Meningioma", "No Tumor", "Pituitary"]
-```
+---
 
-`CLASS_LABELS` ka order EXACTLY wahi hona chahiye jo order training ke
-time model ne seekha tha (agar aapne `ImageDataGenerator.flow_from_directory`
-use kiya tha, to yeh order usually alphabetical hota hai — jo already
-upar diya gaya hai).
+# 🛠️ Technologies Used
 
-### 5. App run karein
 
-```bash
-python app.py
-```
+## 🤖 Artificial Intelligence
 
-Browser me kholein: **http://127.0.0.1:5000**
+- Python
+- TensorFlow
+- Keras
+- CNN
+- Deep Learning
+- Computer Vision
+- NumPy
+- Pillow
 
-Pehli baar register karke account banayein, phir login karke dashboard
-se MRI image upload karein.
 
-## Notes
+## ⚙️ Backend Development
 
-- Database automatically create ho jayega first run par (`instance/database.db`).
-- Max upload size 8 MB hai — `config.py` me `MAX_CONTENT_LENGTH` se change kar sakte ho.
-- Production me deploy karte waqt `SECRET_KEY` ko environment variable se set karein
-  aur `debug=True` hata dein.
-- Yeh tool sirf screening-assistance ke liye hai, medical diagnosis nahi hai —
-  disclaimer har report aur result page par already add hai.
+- Flask
+- Python
+  
+
+
+## 🎨 Frontend Development
+
+- HTML5
+- CSS3
+- JavaScript
+  
+
+
+## 🗄️ Database
+
+- SQLite
+
+
+---
+
+# 🧠 AI Model Details
+
+
+## Model Architecture
+
+Custom Convolutional Neural Network (CNN)
+
+
+## Model Training
+
+The AI model was trained by **Hemant Rahangdale** using a Brain MRI dataset.
+
+The trained model was then integrated into the NeuroScan AI Flask application.
+
+
+## Input
+
+MRI Brain Image
+
+
+## Image Size
+
+150 × 150 × 3
+
+
+## Image Preprocessing
+
+The input MRI image is:
+
+1. Resized to **150 × 150**
+2. Converted to RGB
+3. Normalized using:
+
+## ScreenShot
+  LOGIN PAGE
+  <img width="678" height="723" alt="image" src="https://github.com/user-attachments/assets/0a030b8e-a5dd-4b9b-bccb-c3223f0d68f2" />
+  DASHBOARD PAGE
+  <img width="1201" height="814" alt="image" src="https://github.com/user-attachments/assets/bc23b314-a384-4a56-abcf-452fcf3059d5" />
+  RESULT PAGE
+  <img width="1205" height="740" alt="image" src="https://github.com/user-attachments/assets/14228d8d-b92f-4e78-974c-4252140be1d5" />
+  PDF REPORT PAGE
+  <img width="540" height="680" alt="image" src="https://github.com/user-attachments/assets/edb37369-62a3-4b07-ad6f-e0090160491a" />
+ 
+ # 👨‍💻 Team Members
+
+- Hemant Rahangdale- AI Model Training
+- Aryan Shahare -  Frontend and Research
+- Gunjal Dohare -Backend , Testing & Documentation
+
+
+# 🔮 Future Improvements
+
+- Real time MRI analysis
+- Cloud Deployment
+- Doctor Dashboard
+- Medical Report Generation
+- More Accurate AI Model
+
+
+# ⚠️ Disclaimer
+
+This project is developed for educational purposes only.
+
+It is not a replacement for professional medical diagnosis.
+
+
+# ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub.
